@@ -1,14 +1,14 @@
-package com.bdsk.kasa.controllers;
+package com.bdsk.kasa.web;
 
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ProductController {
+public class HomeController {
     @GetMapping("/")
-    public String products() {
-        return "products";
+    public String home() {
+        return "home";
 
     }
 }
