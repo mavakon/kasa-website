@@ -48,4 +48,28 @@ public class Product {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (getId() != product.getId()) return false;
+        if (getPrice() != product.getPrice()) return false;
+        if (!getName().equals(product.getName())) return false;
+        if (!getDescription().equals(product.getDescription())) return false;
+        return getAuthor().equals(product.getAuthor());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId();
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + getPrice();
+        result = 31 * result + getAuthor().hashCode();
+        return result;
+    }
 }
