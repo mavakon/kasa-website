@@ -2,10 +2,12 @@ package com.bdsk.kasa.repository;
 
 import com.bdsk.kasa.domain.User;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.*;
 
+@Repository
 public class UserRepository implements GenericRepository<User, Integer> {
 
     private final Map<Integer, Long> indexMap = new HashMap<>();

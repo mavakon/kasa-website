@@ -2,10 +2,13 @@ package com.bdsk.kasa.repository;
 
 import com.bdsk.kasa.domain.Product;
 import com.google.gson.Gson;
+import org.springframework.stereotype.Repository;
+
 
 import java.io.*;
 import java.util.*;
 
+@Repository
 public class ProductRepository implements GenericRepository<Product, Integer> {
 
     private final Map<Integer, Long> indexMap = new HashMap<>();
