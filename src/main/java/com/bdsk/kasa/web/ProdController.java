@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProdController {
     private final ProductRepository productRepository = new ProductRepository();
 
+    @GetMapping("/")
+    public String products(Model model) {
+        model.addAttribute("products", productRepository.findAll());
+        return "home";
+    }
+
     @GetMapping("/register")
     public String showProductForm() {
         return "prod";
