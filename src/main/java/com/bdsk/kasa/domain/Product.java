@@ -6,7 +6,7 @@ public class Product {
     private int id = UUID.randomUUID().hashCode();
     private String name;
     private String description;
-    private int price;
+    private double price;
     private String author;
 
     public int getId() {
@@ -33,11 +33,11 @@ public class Product {
         this.description = description;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -57,7 +57,7 @@ public class Product {
         Product product = (Product) o;
 
         if (getId() != product.getId()) return false;
-        if (getPrice() != product.getPrice()) return false;
+        if (Double.compare(getPrice(), product.getPrice()) != 0) return false;
         if (!getName().equals(product.getName())) return false;
         if (!getDescription().equals(product.getDescription())) return false;
         return getAuthor().equals(product.getAuthor());
@@ -65,10 +65,13 @@ public class Product {
 
     @Override
     public int hashCode() {
-        int result = getId();
+        int result;
+        long temp;
+        result = getId();
         result = 31 * result + getName().hashCode();
         result = 31 * result + getDescription().hashCode();
-        result = 31 * result + getPrice();
+        temp = Double.doubleToLongBits(getPrice());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + getAuthor().hashCode();
         return result;
     }
