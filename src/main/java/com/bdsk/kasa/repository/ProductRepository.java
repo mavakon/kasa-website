@@ -2,136 +2,66 @@ package com.bdsk.kasa.repository;
 
 import com.bdsk.kasa.domain.Product;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 
+@Repository
 public class ProductRepository implements GenericRepository<Product, Integer> {
 
-    private final Map<Integer, Long> indexMap = new HashMap<>();
     private final String filePath = "products.json";
     private final Gson gson = new Gson();
 
-    public ProductRepository() {
-        buildIndexMap();
-    }
-
-    private void buildIndexMap() {
-        indexMap.clear();
-        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-            long position = 0;
-            String line;
-            while ((line = file.readLine()) != null) {
-                Product product = gson.fromJson(line, Product.class);
-                indexMap.put(product.getId(), position);
-                position = file.getFilePointer();
-            }
-        } catch (IOException e) {
-            // TODO Add exception handling
-        }
-    }
-
+    @Override
     public Product save(Product productToSave) {
-        List<Product> allProducts = new ArrayList<>();
-        boolean isProductToSavePresent = false;
-        int idToSave = productToSave.getId();
+        List<Product> allProducts = findAll();
+        allProducts.removeIf(product -> product.getId() == productToSave.getId());
+        allProducts.add(productToSave);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Product product = gson.fromJson(line, Product.class);
-                if (!(product.getId() == idToSave)) {
-                    allProducts.add(product);
-                } else {
-                    allProducts.add(productToSave);
-                    isProductToSavePresent = true;
-                }
-            }
+        try (Writer writer = new FileWriter(filePath)) {
+            gson.toJson(allProducts, writer);
         } catch (IOException e) {
-            // TODO Add exception handling
+            // TODO: Add exception handling
         }
-        if (!isProductToSavePresent) {
-            allProducts.add(productToSave);
-        }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Product product : allProducts) {
-                writer.write(gson.toJson(product));
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            // TODO Add exception handling
-        }
-        buildIndexMap();
         return productToSave;
     }
 
     @Override
     public Optional<Product> findById(Integer id) {
-        if (!indexMap.containsKey(id)) {
-            return Optional.empty();
-        }
-        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-            file.seek(indexMap.get(id));
-            Product product = gson.fromJson(file.readLine(), Product.class);
-            return Optional.of(product);
-        } catch (IOException e) {
-            // TODO Add exception handling
-            return Optional.empty();
-        }
+        return findAll().stream()
+                .filter(product -> product.getId() == id)
+                .findFirst();
+    }
 
+    public Optional<Product> findByName(String name) {
+        return findAll().stream()
+                .filter(product -> product.getName().equals(name))
+                .findFirst();
     }
 
     @Override
     public List<Product> findAll() {
-        List<Product> products = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Product product = gson.fromJson(line, Product.class);
-                products.add(product);
-            }
+        Type productListType = new TypeToken<ArrayList<Product>>(){}.getType();
+        try (Reader reader = new FileReader(filePath)) {
+            return gson.fromJson(reader, productListType);
         } catch (IOException e) {
-            // TODO Add exception handling
+            // TODO: Add exception handling
         }
-        return products;
+        return new ArrayList<>();
     }
 
     @Override
     public void deleteById(Integer id) {
+        List<Product> allProducts = findAll();
+        allProducts.removeIf(product -> product.getId() == id);
 
-        if (!indexMap.containsKey(id)) {
-            return;
-        }
-
-        List<Product> allProducts = new ArrayList<>();
-        boolean isProductFound = false;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Product product = gson.fromJson(line, Product.class);
-                if (!(product.getId() == id)) {
-                    allProducts.add(product);
-                } else {
-                    isProductFound = true;
-                }
-            }
+        try (Writer writer = new FileWriter(filePath)) {
+            gson.toJson(allProducts, writer);
         } catch (IOException e) {
-            // TODO Add exception handling
+            // TODO: Add exception handling
         }
-
-        if (!isProductFound) {
-            return;
-        }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Product product : allProducts) {
-                writer.write(gson.toJson(product));
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            // TODO Add exception handling
-        }
-
-        buildIndexMap();
     }
 }
