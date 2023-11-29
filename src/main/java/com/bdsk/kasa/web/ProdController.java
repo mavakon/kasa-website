@@ -25,6 +25,6 @@ public class ProdController {
     @PostMapping("/process")
     public String processProduct(Product product) {
         productRepository.save(product);
-        return "redirect:/products";
+        return "redirect:/products/";
     }
 }
