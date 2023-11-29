@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="container">
-            <form role="form" class="form-horizontal" action="/process" method="post">
+            <form role="form" class="form-horizontal" action="/products/process" method="post">
                 <div class="form-group">
                     <h1>Реєстрація продукту</h1>
                     
@@ -20,7 +20,10 @@
                     
                     <label for="price" class="control-label"></label>
                     <input type="number" step="0.01" class="form-control" id="price" name="price" placeholder="Введіть ціну">
-                </div>    
+
+                    <label for="author" class="control-label"></label>
+                    <input type="text" class="form-control" id="author" name="author" placeholder="Введіть продавця">
+                </div>
                     
                 <div class="mt-3">
                     <button type="submit" class="btn btn-secondary rounded-pill">Додати продукт</button>

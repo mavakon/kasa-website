@@ -1,16 +1,15 @@
 package com.bdsk.kasa.web;
 
 import com.bdsk.kasa.domain.Product;
+import com.bdsk.kasa.repository.ProductRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/products")
 public class ProdController {
+    private final ProductRepository productRepository = new ProductRepository();
 
     @GetMapping("/register")
     public String showProductForm() {
@@ -18,19 +17,8 @@ public class ProdController {
     }
 
     @PostMapping("/process")
-    public String processProduct(
-            @RequestParam("name") String name,
-            @RequestParam("description") String description,
-            @RequestParam("price") double price,
-            Model model) {
-        Product product = new Product();
-        product.setName(name);
-        product.setDescription(description);
-        product.setPrice(price);
-
-        // код для обробки даних
-        System.out.println("Received product data - Name: " + name + ", Description: " + description + ", Price: " + price);
-
-        return "redirect:/";
+    public String processProduct(Product product) {
+        productRepository.save(product);
+        return "redirect:/products";
     }
 }
