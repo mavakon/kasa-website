@@ -50,7 +50,6 @@ public class User {
         User user = (User) o;
 
         if (getId() != user.getId()) return false;
-        if (isAct() != user.isAct()) return false;
         if (!getLogin().equals(user.getLogin())) return false;
         return getPassword().equals(user.getPassword());
     }
@@ -60,7 +59,6 @@ public class User {
         int result = getId();
         result = 31 * result + getLogin().hashCode();
         result = 31 * result + getPassword().hashCode();
-        result = 31 * result + (isAct() ? 1 : 0);
         return result;
     }
 }
