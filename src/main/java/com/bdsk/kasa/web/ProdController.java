@@ -22,6 +22,9 @@ public class ProdController {
         return "prod";
     }
 
+    @GetMapping("/example")
+    public String example(){ return "example";}
+
     @PostMapping("/process")
     public String processProduct(Product product) {
         productRepository.save(product);
