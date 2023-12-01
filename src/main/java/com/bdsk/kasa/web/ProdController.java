@@ -18,9 +18,13 @@ public class ProdController {
     }
 
     @GetMapping("/register")
-    public String showProductForm() {
+    public String showProductForm(Model model) {
+        model.addAttribute("product", new Product());
         return "prod";
     }
+
+    @GetMapping("/example")
+    public String example(){ return "example";}
 
     @PostMapping("/process")
     public String processProduct(Product product) {

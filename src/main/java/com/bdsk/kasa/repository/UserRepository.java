@@ -63,4 +63,5 @@ public class UserRepository implements GenericRepository<User, Integer> {
             // TODO: Add exception handling
         }
     }
+
 }
