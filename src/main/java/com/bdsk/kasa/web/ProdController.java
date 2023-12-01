@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/products")
+@RequestMapping("/kasa")
 public class ProdController {
     private final ProductRepository productRepository = new ProductRepository();
 
@@ -23,12 +23,15 @@ public class ProdController {
         return "prod";
     }
 
-    @GetMapping("/example")
-    public String example(){ return "example";}
+    @GetMapping("/cart")
+    public String cart(){ return "cart";}
+
+    @GetMapping("/profile")
+    public String profile(){ return "profile";}
 
     @PostMapping("/process")
     public String processProduct(Product product) {
         productRepository.save(product);
-        return "redirect:/products/";
+        return "redirect:/kasa/";
     }
 }
