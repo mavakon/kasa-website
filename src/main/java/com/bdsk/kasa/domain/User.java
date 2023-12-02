@@ -1,14 +1,21 @@
 package com.bdsk.kasa.domain;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
-public class User {
+public class User implements UserDetails {
     private int id = UUID.randomUUID().hashCode();
-    private String login;
+    private String username;
     private String password;
-    private boolean act;
-    //private ... Role
-
+    private boolean enabled = true;
+    private boolean accountExpired = false;
+    private boolean credentialsExpired = false;
+    private boolean accountLocked = false;
 
     public int getId() {
         return id;
@@ -18,12 +25,13 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -34,31 +42,45 @@ public class User {
         this.password = password;
     }
 
-    public boolean isAct() {
-        return act;
-    }
-
-    public void setAct(boolean act) {
-        this.act = act;
+    @Override
+    public boolean isAccountNonExpired() {
+        return !accountExpired;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (getId() != user.getId()) return false;
-        if (!getLogin().equals(user.getLogin())) return false;
-        return getPassword().equals(user.getPassword());
+    public boolean isAccountNonLocked() {
+        return !accountLocked;
     }
 
     @Override
-    public int hashCode() {
-        int result = getId();
-        result = 31 * result + getLogin().hashCode();
-        result = 31 * result + getPassword().hashCode();
-        return result;
+    public boolean isCredentialsNonExpired() {
+        return !credentialsExpired;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setAccountExpired(boolean accountExpired) {
+        this.accountExpired = accountExpired;
+    }
+
+    public void setCredentialsExpired(boolean credentialsExpired) {
+        this.credentialsExpired = credentialsExpired;
+    }
+
+    public void setAccountLocked(boolean accountLocked) {
+        this.accountLocked = accountLocked;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
 }

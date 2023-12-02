@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepository implements GenericRepository<User, Integer> {
@@ -35,9 +37,9 @@ public class UserRepository implements GenericRepository<User, Integer> {
                 .findFirst();
     }
 
-    public Optional<User> findByLogin(String login) {
+    public Optional<User> findByUsername(String username) {
         return findAll().stream()
-                .filter(user -> user.getLogin().equals(login))
+                .filter(user -> user.getUsername().equals(username))
                 .findFirst();
     }
 
