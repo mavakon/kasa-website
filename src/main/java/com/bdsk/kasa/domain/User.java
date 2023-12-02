@@ -1,5 +1,6 @@
 package com.bdsk.kasa.domain;
 
+import com.bdsk.kasa.domain.interfaces.Identifiable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-public class User implements UserDetails {
+public class User implements UserDetails, Identifiable {
     private int id = UUID.randomUUID().hashCode();
     private String username;
     private String password;
@@ -17,10 +18,12 @@ public class User implements UserDetails {
     private boolean credentialsExpired = false;
     private boolean accountLocked = false;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -34,6 +37,7 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }

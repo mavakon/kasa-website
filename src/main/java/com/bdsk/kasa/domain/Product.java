@@ -1,18 +1,21 @@
 package com.bdsk.kasa.domain;
 
+import com.bdsk.kasa.domain.interfaces.*;
 import java.util.UUID;
 
-public class Product {
+public class Product implements Identifiable, Priceable, Describable {
     private int id = UUID.randomUUID().hashCode();
     private String name;
     private String description;
     private double price;
     private String author;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -25,18 +28,21 @@ public class Product {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public double getPrice() {
         return price;
     }
-
+    @Override
     public void setPrice(double price) {
         this.price = price;
     }
