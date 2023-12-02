@@ -87,4 +87,31 @@ public class User implements UserDetails, Identifiable {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (getId() != user.getId()) return false;
+        if (isEnabled() != user.isEnabled()) return false;
+        if (accountExpired != user.accountExpired) return false;
+        if (credentialsExpired != user.credentialsExpired) return false;
+        if (accountLocked != user.accountLocked) return false;
+        if (!getUsername().equals(user.getUsername())) return false;
+        return getPassword().equals(user.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId();
+        result = 31 * result + getUsername().hashCode();
+        result = 31 * result + getPassword().hashCode();
+        result = 31 * result + (isEnabled() ? 1 : 0);
+        result = 31 * result + (accountExpired ? 1 : 0);
+        result = 31 * result + (credentialsExpired ? 1 : 0);
+        result = 31 * result + (accountLocked ? 1 : 0);
+        return result;
+    }
 }
