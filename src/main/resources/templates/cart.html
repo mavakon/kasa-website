@@ -51,15 +51,42 @@
             </div>
             <div class="collapse mt-2" id="wordList">
                 <div class="card card-body d-flex flex-row bg-secondary text-white">
-                    <a th:href="@{/kasa/}" class="me-3">Пошук</a>
-                    <a th:href="@{/kasa/profile}" class="me-3">Профіль</a>
-                    <a th:href="@{/kasa/cart}">Корзина</a>
+                    <a th:href="@{/}" class="me-3">Пошук</a>
+                    <a th:href="@{/profile}" class="me-3">Профіль</a>
+                    <a th:href="@{/cart}">Кошик</a>
                 </div>
             </div>
         </nav>
     </div>
-    <div>
-        Корзина
+    <div class="container mt-3">
+        <h2>Ваш Кошик:</h2>
+        <table class="table" th:if="${cart != null && !cart.products.isEmpty()}">
+            <thead class="thead-dark">
+            <tr>
+                <th>Назва</th>
+                <th>К-сть</th>
+                <th>Ціна</th>
+                <th>Вартість</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${cart.products}">
+                <td th:text="${entry.key.name}"></td>
+                <td th:text="${entry.value}"></td>
+                <td th:text="${entry.key.price}"></td>
+                <td th:text="${entry.key.price * entry.value}"></td>
+                <td>
+                    <form th:action="@{/remove-from-cart/{id}(id=${entry.key.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Видалити (1 шт.)</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${cart == null || cart.products.isEmpty()}">
+            <p>Ваш кошик пустий.</p>
+        </div>
     </div>
 </body>
 </html>

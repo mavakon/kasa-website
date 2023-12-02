@@ -51,9 +51,9 @@
             </div>
             <div class="collapse mt-2" id="wordList">
                 <div class="card card-body d-flex flex-row bg-secondary text-white">
-                    <a th:href="@{/kasa/}" class="me-3">Пошук</a>
-                    <a th:href="@{/kasa/profile}" class="me-3">Профіль</a>
-                    <a th:href="@{/kasa/cart}">Корзина</a>
+                    <a th:href="@{/}" class="me-3">Пошук</a>
+                    <a th:href="@{/profile}" class="me-3">Профіль</a>
+                    <a th:href="@{/cart}">Кошик</a>
                 </div>
             </div>
         </nav>
@@ -77,6 +77,9 @@
                     </tr>
                 </tbody>
             </table>
+            <form th:action="@{/add-to-cart/{id}(id=${product.id})}" method="post">
+                <button type="submit" class="btn btn-primary">Додати до кошику</button>
+            </form>
         </div>
     </div>
 </body>
