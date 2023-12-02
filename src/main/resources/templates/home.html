@@ -69,9 +69,9 @@
             </div>
             <div class="collapse mt-2" id="wordList">
                 <div class="card card-body d-flex flex-row bg-secondary text-white">
-                    <a th:href="@{/kasa/}" class="me-3">Пошук</a>
-                    <a th:href="@{/kasa/profile}" class="me-3">Профіль</a>
-                    <a th:href="@{/kasa/cart}">Корзина</a>
+                    <a th:href="@{/}" class="me-3">Пошук</a>
+                    <a th:href="@{/profile}" class="me-3">Профіль</a>
+                    <a th:href="@{/cart}">Кошик</a>
                 </div>
             </div>
         </nav>
@@ -99,7 +99,7 @@
                             <tbody>
                                 <tr th:each="product : ${productList}">
                                     <td>
-                                        <a th:href="@{'/kasa/product/' + ${product.id}}">
+                                        <a th:href="@{'/product/' + ${product.id}}">
                                             <span th:text="${product.name}"></span>
                                         </a>
                                     </td>

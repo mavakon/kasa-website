@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public class ProductRepository implements GenericRepository<Product, Integer> {
 
-    private final String filePath = "products.json";
-    private final Gson gson = new Gson();
-    private final Object fileLock = new Object();
+    private static final String filePath = "products.json";
+    private static final Gson gson = new Gson();
+    private static final Object fileLock = new Object();
 
     @Override
     public Product save(Product productToSave) {

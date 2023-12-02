@@ -2,6 +2,7 @@ package com.bdsk.kasa.web;
 
 import com.bdsk.kasa.domain.User;
 import com.bdsk.kasa.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ public class AuthController {
 
     private final UserRepository userRepository;
 
+    @Autowired
     public AuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -30,6 +32,6 @@ public class AuthController {
             return new ModelAndView("registration", "error", "The user with that username already exists!");
         }
         userRepository.save(user);
-        return new ModelAndView("home", "user", user);
+        return new ModelAndView("redirect:/", "user", user);
     }
 }

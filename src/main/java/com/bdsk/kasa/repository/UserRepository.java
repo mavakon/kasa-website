@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public class UserRepository implements GenericRepository<User, Integer> {
 
-    private final String filePath = "users.json";
-    private final Gson gson = new Gson();
-    private final Object fileLock = new Object();
+    private static final String filePath = "users.json";
+    private static final Gson gson = new Gson();
+    private static final Object fileLock = new Object();
 
     @Override
     public User save(User userToSave) {
