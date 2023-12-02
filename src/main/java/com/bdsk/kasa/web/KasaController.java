@@ -18,7 +18,7 @@ public class KasaController {
 
 
     @Autowired
-    public KasaController(ProductRepository productRepository, ShoppingCartService shoppingCartService) {
+    public KasaController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -33,9 +33,6 @@ public class KasaController {
         model.addAttribute("product", new Product());
         return "prod";
     }
-
-    @GetMapping("/cart")
-    public String cart(){ return "cart";}
 
     @GetMapping("/profile")
     public String profile(){ return "profile";}

@@ -77,6 +77,9 @@
                     </tr>
                 </tbody>
             </table>
+            <form th:action="@{/add-to-cart/{id}(id=${product.id})}" method="post">
+                <button type="submit" class="btn btn-primary">Додати до кошику</button>
+            </form>
         </div>
     </div>
 </body>

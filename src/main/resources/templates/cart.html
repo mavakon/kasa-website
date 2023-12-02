@@ -58,8 +58,35 @@
             </div>
         </nav>
     </div>
-    <div>
-        Корзина
+    <div class="container mt-3">
+        <h2>Ваш Кошик:</h2>
+        <table class="table" th:if="${cart != null && !cart.products.isEmpty()}">
+            <thead class="thead-dark">
+            <tr>
+                <th>Назва</th>
+                <th>К-сть</th>
+                <th>Ціна</th>
+                <th>Вартість</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${cart.products}">
+                <td th:text="${entry.key.name}"></td>
+                <td th:text="${entry.value}"></td>
+                <td th:text="${entry.key.price}"></td>
+                <td th:text="${entry.key.price * entry.value}"></td>
+                <td>
+                    <form th:action="@{/remove-from-cart/{id}(id=${entry.key.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Видалити (1 шт.)</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${cart == null || cart.products.isEmpty()}">
+            <p>Ваш кошик пустий.</p>
+        </div>
     </div>
 </body>
 </html>
