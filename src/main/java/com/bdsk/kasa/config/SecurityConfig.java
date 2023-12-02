@@ -23,7 +23,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/kasa/").permitAll()
                         .requestMatchers("/registration").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/register").hasRole("ROLE_SALLER")
+                        .anyRequest().hasRole("ROLE_ADMIN")
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
