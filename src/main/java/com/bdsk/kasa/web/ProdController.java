@@ -2,6 +2,8 @@ package com.bdsk.kasa.web;
 
 import com.bdsk.kasa.domain.Product;
 import com.bdsk.kasa.repository.ProductRepository;
+
+import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,7 @@ public class ProdController {
 
     @GetMapping("/")
     public String products(Model model) {
-        model.addAttribute("products", productRepository.findAll());
+        model.addAttribute("productList", productRepository.findAll());
         return "home";
     }
 
@@ -28,6 +30,18 @@ public class ProdController {
 
     @GetMapping("/profile")
     public String profile(){ return "profile";}
+
+    @GetMapping("/product/{id}")
+    public String showProductPage(@PathVariable int id, Model model) {
+        Optional<Product> possiblyProduct = productRepository.findById(id);
+        if (possiblyProduct.isEmpty()) {
+            return "home";
+        } 
+        Product product = possiblyProduct.get();
+        model.addAttribute("product", product);
+
+        return "product";
+    }
 
     @PostMapping("/process")
     public String processProduct(Product product) {
