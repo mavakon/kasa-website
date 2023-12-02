@@ -16,17 +16,21 @@ public class ProductRepository implements GenericRepository<Product, Integer> {
 
     private final String filePath = "products.json";
     private final Gson gson = new Gson();
+    private final Object fileLock = new Object();
 
     @Override
     public Product save(Product productToSave) {
-        List<Product> allProducts = findAll();
-        allProducts.removeIf(product -> product.getId() == productToSave.getId());
-        allProducts.add(productToSave);
+        synchronized (fileLock) {
+            List<Product> allProducts = findAll();
+            allProducts.removeIf(product -> product.getId() == productToSave.getId());
+            allProducts.add(productToSave);
 
-        try (Writer writer = new FileWriter(filePath)) {
-            gson.toJson(allProducts, writer);
-        } catch (IOException e) {
-            // TODO: Add exception handling
+
+            try (Writer writer = new FileWriter(filePath)) {
+                gson.toJson(allProducts, writer);
+            } catch (IOException e) {
+                // TODO: Add exception handling
+            }
         }
         return productToSave;
     }
@@ -46,24 +50,29 @@ public class ProductRepository implements GenericRepository<Product, Integer> {
 
     @Override
     public List<Product> findAll() {
-        Type productListType = new TypeToken<ArrayList<Product>>(){}.getType();
-        try (Reader reader = new FileReader(filePath)) {
-            return gson.fromJson(reader, productListType);
-        } catch (IOException e) {
-            // TODO: Add exception handling
+        synchronized (fileLock) {
+            Type productListType = new TypeToken<ArrayList<Product>>() {
+            }.getType();
+            try (Reader reader = new FileReader(filePath)) {
+                return gson.fromJson(reader, productListType);
+            } catch (IOException e) {
+                // TODO: Add exception handling
+            }
         }
         return new ArrayList<>();
     }
 
     @Override
     public void deleteById(Integer id) {
-        List<Product> allProducts = findAll();
-        allProducts.removeIf(product -> product.getId() == id);
+        synchronized (fileLock) {
+            List<Product> allProducts = findAll();
+            allProducts.removeIf(product -> product.getId() == id);
 
-        try (Writer writer = new FileWriter(filePath)) {
-            gson.toJson(allProducts, writer);
-        } catch (IOException e) {
-            // TODO: Add exception handling
+            try (Writer writer = new FileWriter(filePath)) {
+                gson.toJson(allProducts, writer);
+            } catch (IOException e) {
+                // TODO: Add exception handling
+            }
         }
     }
 }
