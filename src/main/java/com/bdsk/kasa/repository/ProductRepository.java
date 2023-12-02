@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductRepository implements GenericRepository<Product, Integer> {
