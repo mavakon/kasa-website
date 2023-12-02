@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ProdControllerTesting {
+public class ProdControllerTest {
 
     @Mock
     private ProductRepository productRepository;
@@ -77,7 +77,7 @@ public class ProdControllerTesting {
 
         String viewName = prodController.processProduct(product);
 
-        assertEquals("redirect:/kasa/", viewName);
+        assertEquals("redirect:/", viewName);
         verify(productRepository).save(product);
     }
 }
