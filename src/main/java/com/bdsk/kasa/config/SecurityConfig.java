@@ -24,10 +24,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/kasa/").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/registration").permitAll()
-                        .requestMatchers("/register").hasRole("ROLE_SALLER")
-                        .anyRequest().hasRole("ROLE_ADMIN")
+                        .requestMatchers("/register").hasRole("SELLER")
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")

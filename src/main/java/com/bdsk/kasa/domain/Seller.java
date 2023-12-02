@@ -6,8 +6,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collection;
 import java.util.Collections;
 
-public class Saller {
+public class Seller extends User {
+
+    private String sellerDescription;
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_SALLER"));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_SELLER"));
     }
 }

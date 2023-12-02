@@ -5,18 +5,24 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class User implements UserDetails, Identifiable {
     private int id = UUID.randomUUID().hashCode();
+    private String displayName;
     private String username;
     private String password;
     private boolean enabled = true;
-    private boolean accountExpired = false;
-    private boolean credentialsExpired = false;
-    private boolean accountLocked = false;
+    private boolean accountNonExpired = true;
+    private boolean credentialsNonExpired = true;
+    private boolean accountNonLocked = true;
+    private List<String> roles;
+
+    public User() {
+        this.roles = new ArrayList<>();
+        this.roles.add("ROLE_USER");
+    }
 
     @Override
     public int getId() {
@@ -26,6 +32,14 @@ public class User implements UserDetails, Identifiable {
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override
@@ -47,21 +61,6 @@ public class User implements UserDetails, Identifiable {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return !accountExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !accountLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return !credentialsExpired;
-    }
-
-    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -70,21 +69,46 @@ public class User implements UserDetails, Identifiable {
         this.enabled = enabled;
     }
 
-    public void setAccountExpired(boolean accountExpired) {
-        this.accountExpired = accountExpired;
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
     }
 
-    public void setCredentialsExpired(boolean credentialsExpired) {
-        this.credentialsExpired = credentialsExpired;
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
     }
 
-    public void setAccountLocked(boolean accountLocked) {
-        this.accountLocked = accountLocked;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -96,9 +120,9 @@ public class User implements UserDetails, Identifiable {
 
         if (getId() != user.getId()) return false;
         if (isEnabled() != user.isEnabled()) return false;
-        if (accountExpired != user.accountExpired) return false;
-        if (credentialsExpired != user.credentialsExpired) return false;
-        if (accountLocked != user.accountLocked) return false;
+        if (accountNonExpired != user.accountNonExpired) return false;
+        if (credentialsNonExpired != user.credentialsNonExpired) return false;
+        if (accountNonLocked != user.accountNonLocked) return false;
         if (!getUsername().equals(user.getUsername())) return false;
         return getPassword().equals(user.getPassword());
     }
@@ -109,9 +133,9 @@ public class User implements UserDetails, Identifiable {
         result = 31 * result + getUsername().hashCode();
         result = 31 * result + getPassword().hashCode();
         result = 31 * result + (isEnabled() ? 1 : 0);
-        result = 31 * result + (accountExpired ? 1 : 0);
-        result = 31 * result + (credentialsExpired ? 1 : 0);
-        result = 31 * result + (accountLocked ? 1 : 0);
+        result = 31 * result + (accountNonExpired ? 1 : 0);
+        result = 31 * result + (credentialsNonExpired ? 1 : 0);
+        result = 31 * result + (accountNonLocked ? 1 : 0);
         return result;
     }
 }
