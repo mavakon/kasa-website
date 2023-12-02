@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, RememberMeServices rememberMeServices) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/kasa/").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/registration").permitAll()
                         .anyRequest().authenticated()
                 )
