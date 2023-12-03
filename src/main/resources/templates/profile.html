@@ -101,23 +101,23 @@
             <table class="table">
                 <tr>
                     <th>Display Name:</th>
-                    <td th:text="${#authentication.principal.displayName}"></td>
+                    <td th:text="${user.displayName}"></td>
                 </tr>
                 <tr>
                     <th>Username:</th>
-                    <td th:text="${#authentication.principal.username}"></td>
+                    <td th:text="${user.username}"></td>
                 </tr>
                 <tr>
                     <th>Roles:</th>
                     <td>
-                        <span th:each="role : ${#authentication.principal.authorities}" th:text="${role.authority} + ' '"></span>
+                        <span th:each="role : ${user.authorities}" th:text="${role.authority} + ' '"></span>
                     </td>
                 </tr>
             </table>
         </div>
         <div class="mt-3">
             <h3>Замовлення:</h3>
-            <th:block th:each="${orderList}">
+            <th:block th:each="order : ${orderList}">
                 <div class="border p-3 mt-3">
                     <p th:text="${'Order ID: ' + order.id}"></p>
                     <table class="table">
@@ -136,7 +136,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p th:text="${'Total Price: ' + order.totalPrice}"></p>
+                    <p th:text="${'Total Price: ' + order.price}"></p>
                 </div>
             </th:block>
         </div>
