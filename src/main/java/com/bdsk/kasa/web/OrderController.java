@@ -60,8 +60,12 @@ public class OrderController {
     }
 
     @PostMapping("/confirm-order")
-    public String confirmOrder(HttpServletRequest request, HttpServletResponse response) {
+    public String confirmOrder(HttpServletRequest request, HttpServletResponse response, Model model) {
         ShoppingCart cart = shoppingCartService.loadShoppingCartFromCookie(request);
+        if (cart.getProducts().isEmpty()) {
+            model.addAttribute("error", "Неможливо підтвердити: кошик - пустий!");
+            return "redirect:/cart";
+        }
 
         ConfirmedOrder confirmedOrder = new ConfirmedOrder();
         confirmedOrder.setProducts(cart.getProducts());

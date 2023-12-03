@@ -25,10 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (possiblyUser.isEmpty()) {
             throw new UsernameNotFoundException("No user found with username: " + username);
         }
-        User user = possiblyUser.get();
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(),
-                user.isCredentialsNonExpired(), user.isAccountNonLocked(), user.getAuthorities());
+        return possiblyUser.get();
     }
 
 }
