@@ -56,7 +56,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @PostMapping("/user-to-seller/{id}")
+    @PostMapping("/seller-to-user/{id}")
     public String sellerToUser(@PathVariable int id, Model model) {
         Optional<User> possiblyUser = userRepository.findById(id);
         if (possiblyUser.isEmpty()) {
