@@ -16,13 +16,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class OrderControllerTest {
@@ -111,7 +111,7 @@ class OrderControllerTest {
         when(shoppingCartService.loadShoppingCartFromCookie(request)).thenReturn(cart);
 
         ConfirmedOrder confirmedOrder = new ConfirmedOrder();
-        when(userService.getCurrentUserId()).thenReturn(1);
+        when(userService.getCurrentUser().getId()).thenReturn(1);
 
         // Set a specific ID for the confirmedOrder
         when(confirmedOrderRepository.save(any())).thenAnswer(invocation -> {
@@ -120,7 +120,7 @@ class OrderControllerTest {
             return savedOrder;
         });
 
-        String viewName = orderController.confirmOrder(request, response);
+        String viewName = orderController.confirmOrder(request, response, model);
 
         assertEquals("redirect:/order/1283903494", viewName);
         verify(confirmedOrderRepository).save(any());
