@@ -86,7 +86,7 @@ public class OrderController {
             return "redirect:/";
         }
         ConfirmedOrder confirmedOrder = possiblyConfirmedOrder.get();
-        model.addAttribute("confirmedOrder",  confirmedOrder);
+        model.addAttribute("order",  confirmedOrder);
         return "order";
     }
 

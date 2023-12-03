@@ -58,37 +58,29 @@
             </div>
         </nav>
     </div>
-    <div class="container mt-3">
-        <h2>Ваш Кошик:</h2>
-        <table class="table" th:if="${cart != null && !cart.products.isEmpty()}">
-            <thead class="thead-dark">
-            <tr>
-                <th>Назва</th>
-                <th>К-сть</th>
-                <th>Ціна</th>
-                <th>Вартість</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="entry : ${cart.products}">
-                <td th:text="${entry.key.name}"></td>
-                <td th:text="${entry.value}"></td>
-                <td th:text="${entry.key.price}"></td>
-                <td th:text="${entry.key.price * entry.value}"></td>
-                <td>
-                    <form th:action="@{/remove-from-cart/{id}(id=${entry.key.id})}" method="post">
-                        <button type="submit" class="btn btn-danger">Видалити (1 шт.)</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <form th:action="@{/confirm-order}" method="post">
-            <button type="submit" class="btn btn-success mt-3">Замовити</button>
-        </form>
-
-        <div th:if="${cart == null || cart.products.isEmpty()}">
-            <p>Ваш кошик пустий.</p>
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <p th:text="${error}"></p>
+    </div>
+    <div  th:unless="${error}"  class="container mt-3">
+        <h2 th:text="${'Замовлення: ' + order.id}"></h2>
+        <div class="border p-3 mt-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Назва</th>
+                        <th>К-сть</th>
+                        <th>Ціна</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entry : ${order.products}">
+                        <td th:text="${entry.key.name}"></td>
+                        <td th:text="${entry.value}"></td>
+                        <td th:text="${entry.key.price}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p th:text="${'Вартість замовлення: ' + order.price}"></p>
         </div>
     </div>
 </body>
