@@ -1,1 +1,1 @@
-[{"id":-1512490722,"username":"user","password":"331","enabled":true,"accountNonExpired":true,"credentialsNonExpired":true,"accountNonLocked":true,"roles":["ROLE_USER"]}]
+[{"id":-1512490722,"username":"user","password":"331","enabled":true,"accountNonExpired":true,"credentialsNonExpired":true,"accountNonLocked":true,"roles":["ROLE_USER", "ROLE_ADMIN"]},{"id":-1559872586,"username":"admin","password":"admin","enabled":true,"accountNonExpired":true,"credentialsNonExpired":true,"accountNonLocked":true,"roles":["ROLE_USER"]}]
