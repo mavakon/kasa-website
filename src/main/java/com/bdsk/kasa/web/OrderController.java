@@ -71,7 +71,7 @@ public class OrderController {
         confirmedOrder.setProducts(cart.getProducts());
         confirmedOrder.setPrice(cart.getPrice());
 
-        confirmedOrder.setAuthorId(userService.getCurrentUserId());
+        confirmedOrder.setAuthorId(userService.getCurrentUser().getId());
 
         confirmedOrderRepository.save(confirmedOrder);
         shoppingCartService.clearShoppingCart(response);

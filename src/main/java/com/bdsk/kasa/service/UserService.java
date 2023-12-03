@@ -7,16 +7,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-
-    public int getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalStateException("No authenticated user found");
-        }
-        User currentUser = (User) authentication.getPrincipal();
-        return currentUser.getId();
-    }
-
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
