@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -31,7 +32,16 @@ public class KasaController {
     @GetMapping("/register")
     public String showProductForm(Model model) {
         model.addAttribute("product", new Product());
-        return "prod";
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public ModelAndView processProduct(Product product) {
+        if (productRepository.findByName(product.getName()).isPresent()) {
+            return new ModelAndView("register", "error", "Вже є товар з такою назвою.");
+        }
+        productRepository.save(product);
+        return new ModelAndView("register", "success", "Товар успішно додано!");
     }
 
     @GetMapping("/profile")
@@ -49,9 +59,5 @@ public class KasaController {
         return "product";
     }
 
-    @PostMapping("/process")
-    public String processProduct(Product product) {
-        productRepository.save(product);
-        return "redirect:/kasa/";
-    }
+
 }

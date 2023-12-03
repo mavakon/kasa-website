@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="container">
-    <form th:object="${product}" role="form" class="form-horizontal" th:action="@{/process}" method="post">
+    <form th:object="${product}" role="form" class="form-horizontal" th:action="@{/register}" method="post">
         <div class="form-group">
             <h1>Реєстрація продукту</h1>
 
@@ -29,10 +29,16 @@
             <input type="text" class="form-control" id="author" th:field="${product.author}" placeholder="Введіть продавця">
         </div>
 
-        <div class="mt-3">
+        <div class="mt-3 mb-3">
             <button type="submit" class="btn btn-secondary rounded-pill">Додати продукт</button>
         </div>
     </form>
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <p th:text="${error}"></p>
+    </div>
+    <div th:if="${success}" class="alert alert-success" role="alert">
+        <p th:text="${success}"></p>
+    </div>
 </div>
 </body>
 </html>
