@@ -55,13 +55,13 @@ public class ShoppingCartService {
         saveShoppingCartToCookie(emptyCart, response);
     }
 
-    private String serializeShoppingCart(ShoppingCart shoppingCart) {
+    public String serializeShoppingCart(ShoppingCart shoppingCart) {
         Map<Integer, Integer> cartMap = new HashMap<>();
         shoppingCart.getProducts().forEach((product, quantity) -> cartMap.put(product.getId(), quantity));
         return gson.toJson(cartMap);
     }
 
-    private ShoppingCart deserializeShoppingCart(String json) {
+    public ShoppingCart deserializeShoppingCart(String json) {
         Type type = new TypeToken<Map<Integer, Integer>>() {
         }.getType();
         Map<Integer, Integer> cartMap = gson.fromJson(json, type);
