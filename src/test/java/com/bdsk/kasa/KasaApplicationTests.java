@@ -1,13 +1,11 @@
 package com.bdsk.kasa;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class KasaApplicationTests {
+class KasaApplicationTest {
 
 	@Test
-	void contextLoads() {
+	void main() {
+		KasaApplication.main(new String[]{});
 	}
-
 }

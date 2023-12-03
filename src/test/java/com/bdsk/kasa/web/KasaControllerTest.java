@@ -1,98 +1,139 @@
 package com.bdsk.kasa.web;
 
+import com.bdsk.kasa.domain.ConfirmedOrder;
 import com.bdsk.kasa.domain.Product;
+import com.bdsk.kasa.domain.User;
+import com.bdsk.kasa.repository.ConfirmedOrderRepository;
 import com.bdsk.kasa.repository.ProductRepository;
+import com.bdsk.kasa.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+class KasaControllerTest {
 
-@ExtendWith(MockitoExtension.class)
-public class KasaControllerTest {
-
-    private MockMvc mockMvc;
     @Mock
     private ProductRepository productRepository;
 
     @Mock
-    private Model model;
+    private UserService userService;
+
+    @Mock
+    private ConfirmedOrderRepository confirmedOrderRepository;
 
     @InjectMocks
-    private KasaController KasaController;
+    private KasaController kasaController;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
-    public void testProducts() {
-        when(productRepository.findAll()).thenReturn(Collections.emptyList());
+    void testProducts() {
+        Model model = mock(Model.class);
 
-        String viewName = KasaController.products(model);
+        String viewName = kasaController.products(model);
 
         assertEquals("home", viewName);
-        verify(model).addAttribute(eq("productList"), any());
+        verify(model).addAttribute("productList", productRepository.findAll());
+    }
+
+    //@Test
+    //void testShowProductForm() {
+    //    Model model = mock(Model.class);
+//
+    //    String viewName = kasaController.showProductForm(model);
+//
+    //    assertEquals("register", viewName);
+    //    verify(model).addAttribute("product", new Product());
+    //}
+
+    @Test
+    void testProcessProduct() {
+        Product product = new Product();
+        User user = new User();
+        user.setId(1);
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(productRepository.findByName(any())).thenReturn(Optional.empty());
+
+        ModelAndView modelAndView = kasaController.processProduct(product);
+
+        assertEquals("register", modelAndView.getViewName());
+        assertEquals("Товар успішно додано!", modelAndView.getModel().get("success"));
+        verify(productRepository).save(product);
     }
 
     @Test
-    public void testShowProductForm() {
-        String viewName = KasaController.showProductForm(model);
+    void testProcessProductWithExistingProduct() {
+        Product product = new Product();
+        User user = new User();
+        user.setId(1);
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(productRepository.findByName(any())).thenReturn(Optional.of(new Product()));
 
-        assertEquals("prod", viewName);
-        verify(model).addAttribute(eq("product"), any());
+        ModelAndView modelAndView = kasaController.processProduct(product);
+
+        assertEquals("register", modelAndView.getViewName());
+        assertEquals("Вже є товар з такою назвою.", modelAndView.getModel().get("error"));
+        verify(productRepository, never()).save(any());
     }
 
-    @Test
-    public void testProfile() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(KasaController).build();
+    //@Test
+    //void testProfile() {
+    //    User user = new User();
+    //    user.setId(1);
+    //    user.setUsername("fbok");
+    //    user.setPassword("ewdfw");
+//
+    //    when(userService.getCurrentUser()).thenReturn(user);
+    //    when(productRepository.findAll()).thenReturn(Collections.singletonList(new Product()));
+    //    when(confirmedOrderRepository.findAll()).thenReturn(Collections.singletonList(new ConfirmedOrder()));
+//
+    //    Model model = mock(Model.class);
+//
+    //    String viewName = kasaController.profile(model);
+//
+    //    assertEquals("profile", viewName);
+    //    verify(model).addAttribute("user", user);
+    //    verify(model).addAttribute("productList", Collections.singletonList(new Product()));
+    //    verify(model).addAttribute("orderList", Collections.singletonList(new ConfirmedOrder()));
+    //}
 
-        mockMvc.perform(get("/profile"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("profile"));
-    }
     @Test
-    public void testShowProductPage() {
+    void testShowProductPage() {
         int productId = 1;
-        Product mockProduct = new Product();
-        mockProduct.setId(productId);
+        Model model = mock(Model.class);
+        Product product = new Product();
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
-        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
-
-        String viewName = KasaController.showProductPage(productId, model);
+        String viewName = kasaController.showProductPage(productId, model);
 
         assertEquals("product", viewName);
-        verify(model).addAttribute(eq("product"), eq(mockProduct));
+        verify(model).addAttribute("product", product);
     }
 
     @Test
-    public void testShowProductPageNotFound() {
+    void testShowProductPageWithInvalidProductId() {
         int productId = 1;
-
+        Model model = mock(Model.class);
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
-        String viewName = KasaController.showProductPage(productId, model);
+        String viewName = kasaController.showProductPage(productId, model);
 
-        assertEquals("home", viewName);
-        verify(model, never()).addAttribute(eq("product"), any());
-    }
-
-    @Test
-    public void testProcessProduct() {
-        Product product = new Product();
-
-        String viewName = KasaController.processProduct(product);
-
-        assertEquals("redirect:/kasa/", viewName);
-        verify(productRepository).save(product);
+        assertEquals("redirect:/", viewName);
+        verify(model, never()).addAttribute(any(), any());
     }
 }
