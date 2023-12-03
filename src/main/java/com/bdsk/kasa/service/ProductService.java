@@ -18,7 +18,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findByName(String name) {
+    public List<Product> searchByName(String name) {
         List<Product> allProducts = productRepository.findAll();
 
         return allProducts.stream()

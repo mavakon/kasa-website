@@ -42,6 +42,12 @@ public class ProductRepository implements GenericRepository<Product, Integer> {
                 .findFirst();
     }
 
+    public Optional<Product> findByName(String name) {
+        return findAll().stream()
+                .filter(product -> product.getName().equals(name))
+                .findFirst();
+    }
+
     @Override
     public List<Product> findAll() {
         synchronized (fileLock) {
