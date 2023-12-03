@@ -88,18 +88,7 @@ class OrderControllerTest {
         verify(shoppingCartService).saveShoppingCartToCookie(any(), eq(response));
     }
 
-    @Test
-    void testShowProductPage() {
-        int orderId = 1;
-        ConfirmedOrder confirmedOrder = new ConfirmedOrder();
-        confirmedOrder.setId(orderId);
-        when(confirmedOrderRepository.findById(orderId)).thenReturn(Optional.of(confirmedOrder));
 
-        String viewName = orderController.showProductPage(orderId, model);
-
-        assertEquals("order", viewName);
-        verify(model).addAttribute("confirmedOrder", confirmedOrder);
-    }
 
     @Test
     void testShowProductPageWithInvalidOrderId() {

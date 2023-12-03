@@ -112,18 +112,18 @@ class ProductRepositoryTest {
         product1.setPrice(1234);
         product1.setAuthorId(1);
         Product product2 = new Product();
-        product2.setId(1);
+        product2.setId(2);
         product2.setName("prod2");
         product2.setDescription("b,ob;");
-        product2.setPrice(1234);
-        product2.setAuthorId(1);
+        product2.setPrice(12345);
+        product2.setAuthorId(2);
         repository.save(product1);
         repository.save(product2);
 
         List<Product> allProducts = repository.findAll();
 
-        assertEquals(1, allProducts.size());
-        assertEquals("prod2", allProducts.get(0).getName());
+        assertEquals(2, allProducts.size());
+        assertEquals("prod2", allProducts.get(1).getName());
         assertEquals(1234.0, allProducts.get(0).getPrice());
     }
 
