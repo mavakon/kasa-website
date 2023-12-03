@@ -60,7 +60,7 @@ public class AuthControllerTest {
 
         ModelAndView modelAndView = authController.acceptRegistrationForm(newUser);
 
-        assertEquals("home", modelAndView.getViewName());
+        assertEquals("redirect:/", modelAndView.getViewName());
         assertEquals(newUser, modelAndView.getModel().get("user"));
         verify(userRepository).save(eq(newUser));
     }
