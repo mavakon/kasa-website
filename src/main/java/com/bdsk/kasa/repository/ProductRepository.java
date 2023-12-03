@@ -63,10 +63,11 @@ public class ProductRepository implements GenericRepository<Product, Integer> {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public boolean deleteById(Integer id) {
+        boolean deleted;
         synchronized (fileLock) {
             List<Product> allProducts = findAll();
-            allProducts.removeIf(product -> product.getId() == id);
+            deleted = allProducts.removeIf(product -> product.getId() == id);
 
             try (Writer writer = new FileWriter(filePath)) {
                 gson.toJson(allProducts, writer);
@@ -74,5 +75,6 @@ public class ProductRepository implements GenericRepository<Product, Integer> {
                 // TODO: Add exception handling
             }
         }
+        return deleted;
     }
 }
