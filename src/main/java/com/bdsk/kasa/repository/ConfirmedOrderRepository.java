@@ -62,7 +62,7 @@ public class ConfirmedOrderRepository implements GenericRepository<ConfirmedOrde
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public boolean deleteById(Integer id) {
         synchronized (fileLock) {
             List<ConfirmedOrder> allConfirmedOrders = findAll();
             allConfirmedOrders.removeIf(confirmedOrder -> confirmedOrder.getId() == id);
@@ -73,5 +73,6 @@ public class ConfirmedOrderRepository implements GenericRepository<ConfirmedOrde
                 // TODO: Add exception handling
             }
         }
+        return false;
     }
 }

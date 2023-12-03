@@ -61,10 +61,11 @@ public class UserRepository implements GenericRepository<User, Integer> {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public boolean deleteById(Integer id) {
+        boolean deleted;
         synchronized (fileLock) {
             List<User> allUsers = findAll();
-            allUsers.removeIf(user -> user.getId() == id);
+            deleted = allUsers.removeIf(user -> user.getId() == id);
 
             try (Writer writer = new FileWriter(filePath)) {
                 gson.toJson(allUsers, writer);
@@ -72,6 +73,7 @@ public class UserRepository implements GenericRepository<User, Integer> {
                 // TODO: Add exception handling
             }
         }
+        return deleted;
     }
 
 }
