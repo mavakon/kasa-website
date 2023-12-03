@@ -1,8 +1,11 @@
 package com.bdsk.kasa.web;
 
+import com.bdsk.kasa.domain.ConfirmedOrder;
 import com.bdsk.kasa.domain.ShoppingCart;
+import com.bdsk.kasa.repository.ConfirmedOrderRepository;
 import com.bdsk.kasa.repository.ProductRepository;
 import com.bdsk.kasa.service.ShoppingCartService;
+import com.bdsk.kasa.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +15,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller
-public class CartController {
+public class OrderController {
 
     private final ShoppingCartService shoppingCartService;
     private final ProductRepository productRepository;
+    private final UserService userService;
+    private final ConfirmedOrderRepository confirmedOrderRepository;
 
     @Autowired
-    public CartController(ShoppingCartService shoppingCartService, ProductRepository productRepository) {
+    public OrderController(ShoppingCartService shoppingCartService,
+                           ProductRepository productRepository,
+                           UserService userService,
+                           ConfirmedOrderRepository confirmedOrderRepository) {
         this.shoppingCartService = shoppingCartService;
         this.productRepository = productRepository;
+        this.userService = userService;
+        this.confirmedOrderRepository = confirmedOrderRepository;
     }
 
     @GetMapping("/cart")
@@ -46,4 +58,32 @@ public class CartController {
         shoppingCartService.saveShoppingCartToCookie(cart, response);
         return "redirect:/cart";
     }
+
+    @PostMapping("/confirm-order")
+    public String confirmOrder(HttpServletRequest request, HttpServletResponse response) {
+        ShoppingCart cart = shoppingCartService.loadShoppingCartFromCookie(request);
+
+        ConfirmedOrder confirmedOrder = new ConfirmedOrder();
+        confirmedOrder.setProducts(cart.getProducts());
+        confirmedOrder.setPrice(cart.getPrice());
+
+        confirmedOrder.setAuthorId(userService.getCurrentUserId());
+
+        confirmedOrderRepository.save(confirmedOrder);
+        shoppingCartService.clearShoppingCart(response);
+
+        return "redirect:/order/" + confirmedOrder.getId();
+    }
+
+    @GetMapping("/order/{id}")
+    public String showProductPage(@PathVariable int id, Model model) {
+        Optional<ConfirmedOrder> possiblyConfirmedOrder = confirmedOrderRepository.findById(id);
+        if (possiblyConfirmedOrder.isEmpty()) {
+            return "redirect:/";
+        }
+        ConfirmedOrder confirmedOrder = possiblyConfirmedOrder.get();
+        model.addAttribute("confirmedOrder",  confirmedOrder);
+        return "order";
+    }
+
 }

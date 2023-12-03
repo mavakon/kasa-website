@@ -50,6 +50,11 @@ public class ShoppingCartService {
         response.addCookie(cookie);
     }
 
+    public void clearShoppingCart(HttpServletResponse response) {
+        ShoppingCart emptyCart = new ShoppingCart(new HashMap<>());
+        saveShoppingCartToCookie(emptyCart, response);
+    }
+
     private String serializeShoppingCart(ShoppingCart shoppingCart) {
         Map<Integer, Integer> cartMap = new HashMap<>();
         shoppingCart.getProducts().forEach((product, quantity) -> cartMap.put(product.getId(), quantity));
@@ -67,4 +72,5 @@ public class ShoppingCartService {
         });
         return new ShoppingCart(products);
     }
+
 }
