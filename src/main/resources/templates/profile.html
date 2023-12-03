@@ -36,6 +36,7 @@
         }
         body {
             padding-top: 100px;
+            padding-bottom: 90px;
         }
         form {
             width: 300px;
@@ -115,8 +116,37 @@
                 </tr>
             </table>
         </div>
-        <div class="mt-3">
-            <h3>Замовлення:</h3>
+        <div class="mt-3" th:if="${productList != null && !productList.isEmpty()}">
+            <h4>Ваші товари</h4>
+            <table class="table">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Назва</th>
+                            <th scope="col">Ціна</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="product : ${productList}">
+                            <td>
+                                <a th:href="@{'/product/' + ${product.id}}" style="text-decoration: none;">
+                                    <span th:text="${product.name}"></span>
+                                </a>
+                            </td>
+                            <td th:text="${product.price}"></td>
+                            <td>
+                                <form th:action="@{/product-delete/{id}}" method="post">
+                                    <button type="submit" class="btn btn-danger">Видалити</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </table>
+        </div>
+        <div class="mt-3" th:if="${orderList != null && !orderList.isEmpty()}">
+            <h3>Історія замовлень:</h3>
             <th:block th:each="order : ${orderList}">
                 <div class="border p-3 mt-3">
                     <p th:text="${'Order ID: ' + order.id}"></p>
@@ -136,15 +166,23 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p th:text="${'Total Price: ' + order.price}"></p>
+                    <p th:text="${'Вартість замовлення: ' + order.price}"></p>
                 </div>
             </th:block>
         </div>
-        <div class="mt-3 text-center">
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Sign Out" class="btn btn-secondary"/>
-            </form>
-        </div>
+        <nav class="navbar fixed-bottom navbar-light bg-transparent">
+            <div class="container-fluid justify-content-center">
+                <form th:action="@{/logout}" method="post" class="m-1">
+                    <input type="submit" value="Sign Out" class="btn btn-secondary"/>
+                </form>
+                <form th:action="@{/register}" method="post" class="m-1">
+                    <input type="submit" value="Додати товар" class="btn btn-secondary"/>
+                </form>
+                <form th:action="@{/admin}" method="post" class="m-1">
+                    <input type="submit" value="Adminbutt" class="btn btn-danger"/>
+                </form>
+            </div>
+        </nav>
     </div>
 </body>
 </html>
