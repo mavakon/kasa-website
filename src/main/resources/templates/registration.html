@@ -9,25 +9,115 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
+    <style>
+        .navbar {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            height: 90px;
+        }
+
+        .card {
+            border: none;
+        }
+
+        .triangle-btn {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 17px 30px 17px 0;
+            border-color: transparent #ffffff transparent transparent;
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            margin-top: 13px;
+        }
+
+        .card a {
+            color: inherit;
+            text-decoration: none;
+            cursor: default;
+        }
+
+        body {
+            padding-top: 150px;
+        }
+
+        form {
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            flex: 1;
+        }
+
+        .form-group input {
+            flex: 2;
+        }
+
+        .mt-3 {
+            margin-top: 15px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+
+        .rounded-pill {
+            border-radius: 50px;
+        }
+    </style>
 </head>
 <body>
-<div>
-    <span th:if="${error}" th:text="${error}"></span>
-    <form th:object="${user}" th:action="@{/registration}" method="post">
-        <div class="form-group">
-            <label for="displayName" class="control-label">Username:</label>
-            <input type="text" class="form-control" id="displayName" th:field="${user.displayName}" placeholder="Введіть username">
-
-            <label for="username" class="control-label">Username:</label>
-            <input type="text" class="form-control" id="username" th:field="${user.username}" placeholder="Введіть username">
-
-            <label for="password" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" th:field="${user.password}" placeholder="Введіть пароль"/>
-        </div>
-        <div class="mt-3">
-            <button type="submit" class="btn btn-secondary rounded-pill">Зареєструватися</button>
-        </div>
-    </form>
-</div>
+    <div class="container">
+        <nav class="navbar fixed-top navbar-expand-xl navbar-light">
+            <div class="ms-4">
+                <a class="navbar-brand" href="#" style="font-size: 24px; color: white; font-family: 'Arial', sans-serif;">Kasa</a>
+            </div>
+            <div class="ms-auto mb-3">
+                <button class="btn btn-light triangle-btn" data-bs-toggle="collapse" data-bs-target="#wordList"></button>
+            </div>
+            <div class="collapse mt-2" id="wordList">
+                <div class="card card-body d-flex flex-row bg-secondary text-white">
+                    <a th:href="@{/}" class="me-3">Пошук</a>
+                    <a th:href="@{/profile}" class="me-3">Профіль</a>
+                    <a th:href="@{/cart}">Кошик</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div>
+        <form th:object="${user}" th:action="@{/registration}" method="post">
+            <div class="form-group">
+                <label for="username" class="control-label">Username:</label>
+                <input type="text" class="form-control" id="username" th:field="${user.username}" placeholder="Введіть username">
+            </div>
+            <div class="form-group">
+                <label for="password" class="control-label">Password:</label>
+                <input type="password" class="form-control" id="password" th:field="${user.password}" placeholder="Введіть пароль"/>
+            </div>
+            <span th:if="${error}" th:text="${error}" class="text-danger"></span>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-secondary rounded-pill">Зареєструватися</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
