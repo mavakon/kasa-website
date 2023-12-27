@@ -125,6 +125,9 @@ class ProductRepositoryTest {
         assertEquals(2, allProducts.size());
         assertEquals("prod2", allProducts.get(1).getName());
         assertEquals(1234.0, allProducts.get(0).getPrice());
+
+        repository.deleteById(product1.getId());
+        repository.deleteById(product2.getId());
     }
 
     @Test

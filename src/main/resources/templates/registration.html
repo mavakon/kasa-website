@@ -106,6 +106,10 @@
     <div>
         <form th:object="${user}" th:action="@{/registration}" method="post">
             <div class="form-group">
+                <label for="display name" class="control-label">Display Name:</label>
+                <input type="text" class="form-control" id="display name" th:field="${user.displayName}" placeholder="Введіть display name">
+            </div>
+            <div class="form-group">
                 <label for="username" class="control-label">Username:</label>
                 <input type="text" class="form-control" id="username" th:field="${user.username}" placeholder="Введіть username">
             </div>

@@ -93,6 +93,9 @@ public class UserRepositoryTest {
         List<User> allUsers = userRepository.findAll();
         assertEquals(usersToSave.size(), allUsers.size());
         assertTrue(allUsers.containsAll(usersToSave));
+
+        userRepository.deleteById(1);
+        userRepository.deleteById(2);
     }
     @Test
     public void deleteByIdTest() {
